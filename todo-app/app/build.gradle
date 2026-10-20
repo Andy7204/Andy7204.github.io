@@ -1,0 +1,44 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.andy.todo'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.andy.todo'
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+    }
+
+    signingConfigs {
+        // Committed keystore so every build is signed with the same key and
+        // installs as an update over the previous one.
+        release {
+            storeFile file('todo-release.jks')
+            storePassword 'todoapp123'
+            keyAlias 'todo'
+            keyPassword 'todoapp123'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}

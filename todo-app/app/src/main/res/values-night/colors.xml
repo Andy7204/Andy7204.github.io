@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg">#0F1017</color>
+    <color name="surface">#1A1C26</color>
+    <color name="field">#252836</color>
+    <color name="text">#ECEDF5</color>
+    <color name="muted">#8D92A8</color>
+    <color name="line">#3A3E50</color>
+    <color name="primary">#7B7BFF</color>
+    <color name="primary_soft">#2B2B55</color>
+    <color name="danger">#FF6B6F</color>
+    <color name="danger_soft">#3D2023</color>
+    <color name="warn">#FFB547</color>
+    <color name="warn_soft">#3A2D14</color>
+    <color name="chip">#252836</color>
+</resources>
