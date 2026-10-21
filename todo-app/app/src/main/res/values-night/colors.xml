@@ -13,4 +13,9 @@
     <color name="warn">#FFB547</color>
     <color name="warn_soft">#3A2D14</color>
     <color name="chip">#252836</color>
+    <color name="success">#4ADE80</color>
+    <color name="success_soft">#16301F</color>
+    <color name="inverse">#ECEDF5</color>
+    <color name="on_inverse">#1B1D2A</color>
+    <color name="flag">#FF6B6F</color>
 </resources>

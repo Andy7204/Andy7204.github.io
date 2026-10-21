@@ -1,4 +1,4 @@
-name: Build Todo APK
+name: Build Todo app
 
 on:
   push:
@@ -13,6 +13,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      HAS_UPLOAD_KEY: ${{ secrets.UPLOAD_KEYSTORE_BASE64 != '' }}
     defaults:
       run:
         working-directory: todo-app
@@ -26,18 +28,48 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Build release APK
+      - name: Unit tests and lint
         run: |
           chmod +x gradlew
+          ./gradlew testReleaseUnitTest lintRelease --no-daemon
+
+      - name: Build sideload APK
+        run: |
           ./gradlew assembleRelease --no-daemon
           cp app/build/outputs/apk/release/app-release.apk Todo.apk
+
+      - name: Build Play Store bundle (signed with the private upload key)
+        if: env.HAS_UPLOAD_KEY == 'true'
+        env:
+          UPLOAD_KEYSTORE_BASE64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
+          UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+          UPLOAD_KEY_ALIAS: ${{ secrets.UPLOAD_KEY_ALIAS }}
+          UPLOAD_KEY_PASSWORD: ${{ secrets.UPLOAD_KEY_PASSWORD }}
+        run: |
+          echo "$UPLOAD_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload-key.jks"
+          export UPLOAD_KEYSTORE_FILE="$RUNNER_TEMP/upload-key.jks"
+          ./gradlew bundleRelease --no-daemon
+          cp app/build/outputs/bundle/release/app-release.aab Todo-play.aab
+          rm -f "$RUNNER_TEMP/upload-key.jks"
 
       - uses: actions/upload-artifact@v4
         with:
           name: Todo-apk
           path: todo-app/Todo.apk
 
-      - name: Publish to "todo-latest" release
+      - uses: actions/upload-artifact@v4
+        if: env.HAS_UPLOAD_KEY == 'true'
+        with:
+          name: Todo-play-bundle
+          path: todo-app/Todo-play.aab
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: reports
+          path: todo-app/app/build/reports
+
+      - name: Publish APK to "todo-latest" release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: todo-latest

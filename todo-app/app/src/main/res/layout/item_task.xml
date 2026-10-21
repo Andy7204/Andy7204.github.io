@@ -1,68 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    android:background="@drawable/bg_card"
-    android:elevation="1dp"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingStart="8dp"
-    android:paddingTop="14dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="14dp">
+    android:layout_marginBottom="10dp">
 
+    <!-- Revealed while swiping: complete to the right, delete to the left -->
     <FrameLayout
-        android:id="@+id/checkTouch"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless">
+        android:id="@+id/swipeBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
 
         <ImageView
-            android:id="@+id/check"
+            android:id="@+id/swipeIconStart"
             android:layout_width="26dp"
             android:layout_height="26dp"
-            android:layout_gravity="center"
-            android:padding="4dp" />
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="22dp"
+            android:src="@drawable/ic_check" />
+
+        <ImageView
+            android:id="@+id/swipeIconEnd"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="22dp"
+            android:src="@drawable/ic_delete" />
     </FrameLayout>
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/card"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:background="@drawable/bg_card"
+        android:elevation="1dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="14dp">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="@color/text"
-            android:textSize="16sp" />
+        <FrameLayout
+            android:id="@+id/checkTouch"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Mark done">
 
-        <TextView
-            android:id="@+id/due"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/check"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center"
+                android:padding="4dp" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:drawablePadding="5dp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center_vertical"
-            android:paddingStart="8dp"
-            android:paddingTop="3dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="3dp"
-            android:textSize="12sp" />
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/text"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/due"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:drawablePadding="5dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="3dp"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/meta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:drawablePadding="6dp"
+                android:gravity="center_vertical"
+                android:paddingStart="2dp"
+                android:textColor="@color/muted"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/flag"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="8dp"
+            android:contentDescription="High priority"
+            android:src="@drawable/ic_flag"
+            android:tint="@color/flag" />
+
+        <ImageView
+            android:id="@+id/bell"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Reminder set"
+            android:src="@drawable/ic_bell"
+            android:tint="@color/muted" />
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/bell"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_marginStart="8dp"
-        android:src="@drawable/ic_bell"
-        android:tint="@color/muted" />
-</LinearLayout>
+</FrameLayout>
