@@ -1,0 +1,79 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+// Play Store builds are signed with a private upload key supplied through environment
+// variables (GitHub secrets in CI). Without them, the build falls back to the public
+// sideload key in this folder so APKs from GitHub releases keep installing as updates.
+def uploadKeystore = System.getenv('UPLOAD_KEYSTORE_FILE')
+
+android {
+    namespace 'com.andy.todo'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.andy.todo'
+        minSdk 26
+        targetSdk 36
+        versionCode 4
+        versionName '1.3.0'
+    }
+
+    signingConfigs {
+        sideload {
+            storeFile file('todo-release.jks')
+            storePassword 'todoapp123'
+            keyAlias 'todo'
+            keyPassword 'todoapp123'
+        }
+        if (uploadKeystore) {
+            upload {
+                storeFile file(uploadKeystore)
+                storePassword System.getenv('UPLOAD_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('UPLOAD_KEY_ALIAS')
+                keyPassword System.getenv('UPLOAD_KEY_PASSWORD')
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig uploadKeystore ? signingConfigs.upload : signingConfigs.sideload
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError true
+        checkReleaseBuilds true
+        warningsAsErrors false
+        disable 'GradleDependency', 'OldTargetApi', 'SetTextI18n', 'HardcodedText', 'UseCompatLoadingForDrawables',
+                'UnusedAttribute', 'ObsoleteSdkInt', 'IconLauncherShape', 'IconMissingDensityFolder',
+                'MonochromeLauncherIcon', 'UseSwitchCompatOrMaterialXml', 'UseSwitchCompatOrMaterialCode',
+                'AppCompatCustomView', 'Overdraw', 'RtlSymmetry', 'ContentDescription', 'Autofill',
+                'LabelFor', 'TextFields', 'DisableBaselineAlignment', 'InefficientWeight', 'UseCompoundDrawables',
+                'NestedWeights', 'ClickableViewAccessibility'
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}
