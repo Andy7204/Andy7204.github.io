@@ -141,12 +141,6 @@ class MainActivity : Activity(), TaskActions.Listener {
         }
     }
 
-    @Deprecated("Used below Android 13")
-    override fun onBackPressed() {
-        @Suppress("DEPRECATION")
-        if (search.visibility == View.VISIBLE) closeSearch() else super.onBackPressed()
-    }
-
     // TaskActions.Listener
 
     override fun onTasksChanged() = render()
